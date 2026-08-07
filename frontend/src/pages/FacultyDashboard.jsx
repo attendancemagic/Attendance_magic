@@ -189,7 +189,7 @@ useEffect(() => {
                         {
                             faculty_latitude: position.coords.latitude,
                             faculty_longitude: position.coords.longitude,
-                            radius,
+                            radius: parseInt(radius) + Math.ceil(position.coords.accuracy || 0),
                             duration_minutes: duration
                         }
                     );

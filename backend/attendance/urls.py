@@ -10,6 +10,8 @@ from .views import (
     faculty_profile,
     session_details,
     end_session,
+    register_student,
+    get_students,
 )
 
 from .auth_views import LoginView
@@ -41,4 +43,6 @@ urlpatterns = [
     "end-session/",
     end_session
     ),
+    path("students/register/", register_student),
+    path("students/", get_students),
 ]

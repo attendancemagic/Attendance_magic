@@ -23,11 +23,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from face.models import SessionFace
 from django.db.models.functions import TruncDate
-from .models import AttendanceSession, AttendanceRecord
+from .models import AttendanceSession, AttendanceRecord, Student
 from .serializers import (
     AttendanceSessionSerializer,
-    AttendanceRecordSerializer
+    AttendanceRecordSerializer,
+    StudentSerializer
 )
+import cloudinary.uploader
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -505,3 +507,43 @@ def end_session(request):
     return Response({
         "message": "Session Ended Successfully"
     })
+
+@api_view(["POST"])
+def register_student(request):
+    data = request.data
+    face_image = data.get("face_image")
+    
+    if not face_image:
+        return Response({"message": "Face image is required"}, status=400)
+    
+    try:
+        upload_data = cloudinary.uploader.upload(face_image, folder="attendance_magic/students")
+        face_image_url = upload_data.get("secure_url")
+    except Exception as e:
+        return Response({"message": f"Cloudinary upload failed: {str(e)}"}, status=500)
+    
+    student_data = {
+        "name": data.get("name"),
+        "roll_number": data.get("roll_number"),
+        "department": data.get("department"),
+        "section": data.get("section"),
+        "face_image_url": face_image_url,
+        "face_descriptor": data.get("face_descriptor")
+    }
+    
+    serializer = StudentSerializer(data=student_data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "Student registered successfully", "data": serializer.data})
+    
+    return Response(serializer.errors, status=400)
+
+@api_view(["GET"])
+def get_students(request):
+    roll_number = request.GET.get('roll_number')
+    if roll_number:
+        students = Student.objects.filter(roll_number__iexact=roll_number)
+    else:
+        students = Student.objects.all()
+    serializer = StudentSerializer(students, many=True)
+    return Response(serializer.data)

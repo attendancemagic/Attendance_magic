@@ -69,3 +69,14 @@ class AttendanceRecord(models.Model):
 
     def __str__(self):
         return self.roll_number
+
+class Student(models.Model):
+    name = models.CharField(max_length=100)
+    roll_number = models.CharField(max_length=30, unique=True)
+    department = models.CharField(max_length=50)
+    section = models.CharField(max_length=10)
+    face_image_url = models.URLField(null=True, blank=True)
+    face_descriptor = models.JSONField(null=True, blank=True)
+
+    def __str__(self):
+        return self.roll_number

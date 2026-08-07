@@ -7,6 +7,7 @@ import {
 import Login from "./pages/Login";
 import FacultyDashboard from "./pages/FacultyDashboard";
 import StudentAttendance from "./pages/StudentAttendance";
+import StudentRegistration from "./pages/StudentRegistration";
 
 function App() {
 
@@ -32,6 +33,12 @@ function App() {
                 <Route
                     path="/attendance/:id"
                     element={<StudentAttendance />}
+                />
+
+                {/* Student Registration */}
+                <Route
+                    path="/register"
+                    element={<StudentRegistration />}
                 />
 
             </Routes>

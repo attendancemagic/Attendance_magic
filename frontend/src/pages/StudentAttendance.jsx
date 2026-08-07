@@ -1,11 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 import FacialChallenge from "../components/FacialChallenge";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import API from "../services/api";
+import * as faceapi from "@vladmandic/face-api";
+import { toast } from "react-hot-toast";
 
 function StudentAttendance() {
 
     const { id } = useParams();
+    const navigate = useNavigate();
 
     const [session, setSession] = useState(null);
     const [sessionExpired, setSessionExpired] = useState(false);
@@ -21,54 +24,117 @@ function StudentAttendance() {
     const [distance, setDistance] = useState(null);
 
     const [faceImage, setFaceImage] = useState(null);
+    const [isModelsLoaded, setIsModelsLoaded] = useState(false);
+    const [isMatching, setIsMatching] = useState(false);
+    const [inputRollNumber, setInputRollNumber] = useState("");
+    const [faceVerified, setFaceVerified] = useState(false);
+    const [capturedDescriptor, setCapturedDescriptor] = useState(null);
+    const [verificationStatus, setVerificationStatus] = useState(null);
+
     const deviceId = (() => {
+        let id = localStorage.getItem("device_id");
+        if (!id) {
+            id = crypto.randomUUID();
+            localStorage.setItem("device_id", id);
+        }
+        return id;
+    })();
 
-    let id = localStorage.getItem("device_id");
+    useEffect(() => {
+        const initFaceApi = async () => {
+            try {
+                const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/';
+                await Promise.all([
+                    faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
+                    faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+                    faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
+                ]);
+                setIsModelsLoaded(true);
+            } catch (error) {
+                console.error("Failed to load models:", error);
+                toast.error("Failed to load facial recognition models.");
+            }
+        };
 
-    if (!id) {
+        initFaceApi();
+        loadSession();
 
-        id = crypto.randomUUID();
+        const interval = setInterval(async () => {
+            try {
+                await API.get(`session/${id}/`);
+            } catch (error) {
+                if (
+                    error.response &&
+                    (error.response.status === 400 ||
+                     error.response.status === 404)
+                ) {
+                    setSessionExpired(true);
+                    clearInterval(interval);
+                }
+            }
+        }, 3000);
 
-        localStorage.setItem(
-            "device_id",
-            id
-        );
+        return () => clearInterval(interval);
+    }, [id]);
 
-    }
-
-    return id;
-
-})();
-
-  useEffect(() => {
-
-    loadSession();
-
-    const interval = setInterval(async () => {
-
+    const verifyFace1to1 = async () => {
+        const cleanRollNumber = inputRollNumber.trim();
+        if (!cleanRollNumber) {
+            toast.error("Please enter your Roll Number.");
+            return;
+        }
+        setIsMatching(true);
+        setVerificationStatus(null);
         try {
-
-            await API.get(`session/${id}/`);
-
-        } catch (error) {
-
-            if (
-                error.response &&
-                (error.response.status === 400 ||
-                 error.response.status === 404)
-            ) {
-                setSessionExpired(true);
-                clearInterval(interval);
+            const res = await API.get(`students/?roll_number=${cleanRollNumber}`);
+            const studentsList = res.data;
+            if (studentsList.length === 0) {
+                setVerificationStatus({ type: 'NOT_REGISTERED' });
+                setIsMatching(false);
+                return;
+            }
+            
+            const student = studentsList[0];
+            if (!student.face_image_url) {
+                setVerificationStatus({ type: 'ERROR', message: 'Registered face not found. Please register again.' });
+                setIsMatching(false);
+                return;
             }
 
-            // Ignore temporary server/network errors
+            const img = document.createElement('img');
+            img.crossOrigin = "Anonymous";
+            const imgLoadPromise = new Promise((resolve, reject) => {
+                img.onload = resolve;
+                img.onerror = reject;
+            });
+            img.src = student.face_image_url;
+            await imgLoadPromise;
+            
+            const detection = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
+            if (!detection) {
+                setVerificationStatus({ type: 'ERROR', message: 'Could not detect face in registered image.' });
+                setIsMatching(false);
+                return;
+            }
+
+            const distance = faceapi.euclideanDistance(detection.descriptor, capturedDescriptor);
+            if (distance < 0.6) {
+                setFaceVerified(true);
+                setName(student.name);
+                setRollNumber(student.roll_number);
+                setDepartment(student.department);
+                setSection(student.section);
+                setVerificationStatus({ type: 'SUCCESS', studentName: student.name });
+            } else {
+                setVerificationStatus({ type: 'FACE_MISMATCH' });
+            }
+        } catch (error) {
+            console.error("Verification error", error);
+            setVerificationStatus({ type: 'ERROR', message: 'An error occurred during verification.' });
+        } finally {
+            setIsMatching(false);
         }
-
-    }, 3000);
-
-    return () => clearInterval(interval);
-
-}, [id]);
+    };
 
     const loadSession = async () => {
 
@@ -118,89 +184,39 @@ setSection(response.data.section || "A");
 
     };
 
-    const verifyLocation = () => {
-
+    const verifyLocation = (isAuto = false) => {
         if (!navigator.geolocation) {
-
-            alert("Geolocation is not supported.");
-
+            toast.error("Geolocation is not supported.");
             return;
-
         }
 
         navigator.geolocation.getCurrentPosition(
-
             async (position) => {
-
                 try {
-
                     const response = await API.post(
-
                         "verify-location/",
-
                         {
-
                             session_id: id,
-
-                            latitude:
-                                position.coords.latitude,
-
-                            longitude:
-                                position.coords.longitude,
-
-                            accuracy:
-                                position.coords.accuracy,
-
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude,
+                            accuracy: position.coords.accuracy,
                         }
-
                     );
-
-                    setVerified(
-                        response.data.verified
-                    );
-
-                    setDistance(
-                        response.data.distance
-                    );
-
-                    if (
-                        response.data.verified
-                    ) {
-
-                        alert(
-                            "Location Verified Successfully"
-                        );
-
+                    
+                    setVerified(response.data.verified);
+                    setDistance(response.data.distance);
+                    
+                    if (response.data.verified) {
+                        toast.success("Location Verified Successfully");
+                    } else {
+                        toast.error("You are outside the attendance area.");
                     }
-
-                    else {
-
-                        alert(
-                            "You are outside the attendance area."
-                        );
-
-                    }
-
+                } catch (error) {
+                    toast.error("Failed to verify location. Check network or server.");
                 }
-
-                catch (error) {
-
-                    alert(
-
-                        error.response?.data?.message ||
-
-                        "Verification Failed"
-
-                    );
-
-                }
-
             },
-
             (error) => {
-                alert(
-                    "Unable to fetch location: " + error.message
-                );
+                toast.error("Unable to fetch location: " + error.message);
             },
             {
                 enableHighAccuracy: true,
@@ -208,8 +224,13 @@ setSection(response.data.section || "A");
                 maximumAge: 0
             }
         );
-
     };
+
+    useEffect(() => {
+        if (session && !verified) {
+            verifyLocation(true);
+        }
+    }, [session]);
 
    if (sessionExpired) {
 
@@ -285,8 +306,7 @@ const markAttendance = async () => {
     }
 
     try {
-
-        const response = await API.post(
+        const attendancePromise = API.post(
             "mark-attendance/",
             {
                 session_id: id,
@@ -299,16 +319,17 @@ const markAttendance = async () => {
             }
         );
 
+        toast.promise(attendancePromise, {
+            loading: 'Submitting attendance...',
+            success: 'Attendance recorded successfully!',
+            error: (err) => err.response?.data?.message || 'Failed to mark attendance.'
+        });
+
+        await attendancePromise;
         setAttendanceDone(true);
 
     } catch (error) {
-
-        console.log(error.response?.data);
-
-        alert(
-            JSON.stringify(error.response?.data, null, 2)
-        );
-
+        console.error("Attendance error:", error.response?.data);
     }
 
 };
@@ -519,20 +540,7 @@ if (attendanceDone) {
 
                     }
 
-                    <button
-
-                        onClick={verifyLocation}
-
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl"
-
-                    >
-
-                        📍 Verify My Location
-
-                    </button>
-
                     {
-
                         !verified && distance !== null && (
 
                             <div className="bg-red-100 text-red-700 p-4 rounded-xl">
@@ -552,21 +560,87 @@ if (attendanceDone) {
                                 <hr className="my-8" />
                                 <div className="mb-6">
                                     {!faceImage ? (
-                                        <FacialChallenge onChallengeSuccess={(img) => setFaceImage(img)} />
+                                        <FacialChallenge onChallengeSuccess={async (imgSrc) => {
+                                            if (!isModelsLoaded) {
+                                                toast.error("Models not loaded yet.");
+                                                return;
+                                            }
+                                            setIsMatching(true);
+                                            setFaceImage(imgSrc);
+                                            
+                                            try {
+                                                const img = document.createElement("img");
+                                                const imgLoadPromise = new Promise(resolve => {
+                                                    img.onload = resolve;
+                                                    img.onerror = () => resolve(); // prevent hang on error
+                                                });
+                                                img.src = imgSrc;
+                                                await imgLoadPromise;
+                                                
+                                                const detection = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
+                                                
+                                                if (!detection) {
+                                                    toast.error("Face not detected clearly. Try again.");
+                                                    setFaceImage(null);
+                                                    setIsMatching(false);
+                                                    return;
+                                                }
+                                                
+                                                setCapturedDescriptor(detection.descriptor);
+                                            } catch (error) {
+                                                console.error("Capture processing error:", error);
+                                                toast.error("Error processing face. Please try again.");
+                                                setFaceImage(null);
+                                            } finally {
+                                                setIsMatching(false);
+                                            }
+                                        }} />
                                     ) : (
                                         <div className="text-center">
                                             <h2 className="text-2xl font-bold mb-4">Face Verification</h2>
                                             <img src={faceImage} alt="Captured Face" className="w-full rounded-xl border max-w-md mx-auto" />
-                                            <p className="text-green-600 font-semibold mt-3 text-lg">
-                                                ✅ Challenge Completed Successfully
-                                            </p>
+                                            {isMatching ? (
+                                                <p className="text-blue-600 font-semibold mt-3 text-lg">⏳ Identifying face...</p>
+                                            ) : (
+                                                <p className="text-green-600 font-semibold mt-3 text-lg">
+                                                    ✅ Challenge Completed Successfully
+                                                </p>
+                                            )}
+                                            <button 
+                                                onClick={() => {setFaceImage(null); setName(''); setRollNumber('');}} 
+                                                className="mt-6 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition flex items-center justify-center mx-auto w-full md:w-auto"
+                                            >
+                                                🔄 Retake Photo
+                                            </button>
                                         </div>
                                     )}
                                 </div>
 
-                                {faceImage && (
+                                {faceImage && !faceVerified && (
                                     <>
-                                        <h2 className="text-2xl font-bold mb-6">
+                                        <h2 className="text-2xl font-bold mt-8 mb-4">Enter Roll Number to Verify</h2>
+                                        <div className="space-y-4">
+                                            <input
+                                                type="text"
+                                                className="w-full border rounded-xl p-3"
+                                                placeholder="Enter your Roll Number"
+                                                value={inputRollNumber}
+                                                onChange={(e) => setInputRollNumber(e.target.value)}
+                                            />
+                                            <button
+                                                onClick={verifyFace1to1}
+                                                disabled={isMatching || !inputRollNumber}
+                                                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 rounded-xl font-bold"
+                                            >
+                                                {isMatching ? "Verifying..." : "Verify Face"}
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
+
+                                {faceImage && faceVerified && (
+                                    <>
+                                        <h2 className="text-2xl font-bold mt-8 mb-6">
                                             Student Details
                                         </h2>
                                         <div className="space-y-5">
@@ -574,66 +648,102 @@ if (attendanceDone) {
                                                 <label className="block font-semibold mb-2">Full Name</label>
                                                 <input
                                                     type="text"
-                                                    className="w-full border rounded-xl p-3"
-                                                    placeholder="Enter your full name"
+                                                    className="w-full border rounded-xl p-3 bg-gray-100"
+                                                    placeholder="Auto-filled"
                                                     value={name}
-                                                    onChange={(e) => setName(e.target.value)}
+                                                    readOnly
                                                 />
                                             </div>
                                             <div>
                                                 <label className="block font-semibold mb-2">Roll Number</label>
                                                 <input
                                                     type="text"
-                                                    className="w-full border rounded-xl p-3"
-                                                    placeholder="Enter Roll Number"
+                                                    className="w-full border rounded-xl p-3 bg-gray-100"
+                                                    placeholder="Auto-filled"
                                                     value={rollNumber}
-                                                    onChange={(e) => setRollNumber(e.target.value)}
+                                                    readOnly
                                                 />
                                             </div>
                                             <div>
                                                 <label className="block font-semibold mb-2">Department</label>
-                                                <select
-                                                    className="w-full border rounded-xl p-3"
+                                                <input
+                                                    type="text"
+                                                    className="w-full border rounded-xl p-3 bg-gray-100"
+                                                    placeholder="Auto-filled"
                                                     value={department}
-                                                    onChange={(e) => setDepartment(e.target.value)}
-                                                >
-                                                    <option value="CSE">CSE</option>
-                                                    <option value="CSD">CSD</option>
-                                                    <option value="ECE">ECE</option>
-                                                </select>
+                                                    readOnly
+                                                />
                                             </div>
                                             <div>
                                                 <label className="block font-semibold mb-2">Section</label>
-                                                <select
-                                                    className="w-full border rounded-xl p-3"
+                                                <input
+                                                    type="text"
+                                                    className="w-full border rounded-xl p-3 bg-gray-100"
+                                                    placeholder="Auto-filled"
                                                     value={section}
-                                                    onChange={(e) => setSection(e.target.value)}
-                                                >
-                                                    <option value="A">A</option>
-                                                    <option value="B">B</option>
-                                                    <option value="C">C</option>
-                                                    <option value="D">D</option>
-                                                </select>
+                                                    readOnly
+                                                />
                                             </div>
                                             <button
                                                 onClick={markAttendance}
-                                                className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl text-lg font-semibold"
+                                                disabled={!rollNumber || isMatching}
+                                                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white py-3 rounded-xl text-lg font-semibold"
                                             >
-                                                ✅ Mark Attendance
+                                                ✅ Submit Attendance
                                             </button>
                                         </div>
                                     </>
                                 )}
                             </>
-
                         )
-
                     }
-
                 </div>
+
 
             </div>
 
+            {/* Modal for Verification Status */}
+            {verificationStatus && (
+                <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 px-4 backdrop-blur-sm">
+                    <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center transform transition-all scale-100">
+                        {verificationStatus.type === 'NOT_REGISTERED' && (
+                            <>
+                                <div className="text-6xl mb-4">🤷</div>
+                                <h3 className="text-2xl font-bold text-red-600 mb-2">Not Registered</h3>
+                                <p className="text-gray-600 mb-8 font-medium">No registration found for this Roll Number. Please register first.</p>
+                                <div className="flex gap-4 justify-center">
+                                    <button onClick={() => setVerificationStatus(null)} className="px-5 py-3 w-full bg-gray-200 hover:bg-gray-300 rounded-xl font-bold text-gray-700 transition">Close</button>
+                                    <button onClick={() => navigate("/register")} className="px-5 py-3 w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold shadow-md transition">Register Now</button>
+                                </div>
+                            </>
+                        )}
+                        {verificationStatus.type === 'FACE_MISMATCH' && (
+                            <>
+                                <div className="text-6xl mb-4">🚫</div>
+                                <h3 className="text-2xl font-bold text-red-600 mb-2">Face Mismatch</h3>
+                                <p className="text-gray-600 mb-8 font-medium">Face does not match the registered student for this Roll Number.</p>
+                                <button onClick={() => setVerificationStatus(null)} className="w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold shadow-md transition">Try Again</button>
+                            </>
+                        )}
+                        {verificationStatus.type === 'SUCCESS' && (
+                            <>
+                                <div className="text-6xl mb-4">✅</div>
+                                <h3 className="text-2xl font-bold text-green-600 mb-2">Face Verified</h3>
+                                <p className="text-gray-600 mb-8 font-medium text-lg">Welcome, {verificationStatus.studentName}!</p>
+                                <button onClick={() => setVerificationStatus(null)} className="w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold shadow-md transition">Continue</button>
+                            </>
+                        )}
+                        {verificationStatus.type === 'ERROR' && (
+                            <>
+                                <div className="text-6xl mb-4">⚠️</div>
+                                <h3 className="text-2xl font-bold text-orange-600 mb-2">Verification Error</h3>
+                                <p className="text-gray-600 mb-8 font-medium">{verificationStatus.message}</p>
+                                <button onClick={() => setVerificationStatus(null)} className="w-full py-3 bg-gray-200 hover:bg-gray-300 rounded-xl font-bold text-gray-700 transition">Close</button>
+                            </>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
 
     );
