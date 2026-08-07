@@ -63,9 +63,9 @@ export default function StudentRegistration() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-100 flex flex-col justify-center items-center py-10">
-            <div className="bg-white shadow-2xl rounded-3xl p-10 w-full max-w-4xl mx-4">
-                <h1 className="text-4xl font-extrabold text-center mb-2 text-blue-900">📝 Student Registration</h1>
+        <div className="min-h-screen bg-slate-100 flex flex-col justify-center items-center py-6 md:py-10 px-4">
+            <div className="bg-white shadow-2xl rounded-3xl p-6 md:p-10 w-full max-w-4xl">
+                <h1 className="text-3xl md:text-4xl font-extrabold text-center mb-2 text-blue-900">📝 Student Registration</h1>
                 <p className="text-gray-500 text-center mb-8 text-lg">Register your details and face to enable magical attendance.</p>
             {registrationSuccess ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center">

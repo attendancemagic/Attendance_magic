@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import API from "../services/api";
 import { toast, Toaster } from "react-hot-toast";
 import { User, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
@@ -94,47 +94,47 @@ function Login() {
 
             {/* Fixed Video Background */}
             <div className="fixed inset-0 z-0">
-                <video 
-                    autoPlay 
-                    muted 
-                    loop 
-                    playsInline 
+                <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
                     className="w-full h-full object-cover animate-video-zoom"
                 >
                     <source src="https://res.cloudinary.com/qpzoydhi/video/upload/v1786119799/WhatsApp_Video_2026-08-06_at_2.32.07_PM_or6slo.mp4" type="video/mp4" />
                 </video>
-                
+
                 {/* Subtle base vignette & radial shadow around screen edges */}
                 <div className="absolute inset-0 bg-black/20 mix-blend-multiply"></div>
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.6)_100%)]"></div>
 
                 {/* Smooth cinematic transition fade from video to login area (Dark gradient to support white text) */}
-                <div 
-                    className="absolute inset-y-0 right-0 w-full md:w-[70%] lg:w-[60%] xl:w-[50%] pointer-events-none hidden md:block" 
+                <div
+                    className="absolute inset-y-0 right-0 w-full md:w-[70%] lg:w-[60%] xl:w-[50%] pointer-events-none hidden md:block"
                     style={{ background: 'linear-gradient(to right, transparent, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.6) 70%, rgba(0,0,0,0.85) 100%)' }}
                 ></div>
 
                 {/* Additional Frosted Blur fading in from the left */}
-                <div 
+                <div
                     className="absolute inset-y-0 right-0 w-full md:w-[60%] lg:w-[50%] pointer-events-none bg-[rgba(255,255,255,0.03)] backdrop-blur-[20px] hidden md:block"
-                    style={{ 
-                        WebkitMaskImage: 'linear-gradient(to right, transparent, black 60%)', 
-                        maskImage: 'linear-gradient(to right, transparent, black 60%)' 
+                    style={{
+                        WebkitMaskImage: 'linear-gradient(to right, transparent, black 60%)',
+                        maskImage: 'linear-gradient(to right, transparent, black 60%)'
                     }}
                 ></div>
             </div>
 
             {/* Global Logo - Moved slightly higher and hidden entirely on mobile */}
-            <img 
-                src="https://res.cloudinary.com/qpzoydhi/image/upload/v1786119954/IMG_2908_myf0nj.png" 
-                alt="SPARCX Logo" 
+            <img
+                src="https://res.cloudinary.com/qpzoydhi/image/upload/v1786119954/IMG_2908_myf0nj.png"
+                alt="SPARCX Logo"
                 className="absolute top-[28px] left-[48px] w-[160px] z-50 object-contain drop-shadow-[0_4px_15px_rgba(0,0,0,0.4)] hidden md:block"
             />
 
             {/* Right-aligned Glassmorphism Login Card (Perfectly centered on mobile) */}
             <div className="relative md:absolute md:right-[6%] lg:right-[8%] md:top-1/2 w-full px-5 sm:px-8 md:px-0 max-w-[480px] z-20 animate-slide-right mx-auto md:mx-0">
-                
-                <div 
+
+                <div
                     className="w-full p-8 sm:p-10"
                     style={{
                         background: 'rgba(255,255,255,0.12)',
@@ -207,7 +207,7 @@ function Login() {
                                         e.target.style.borderColor = 'rgba(255,255,255,0.15)';
                                     }}
                                 />
-                                <button 
+                                <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
                                     className="absolute inset-y-0 right-0 pr-5 flex items-center hover:text-white transition-colors"
@@ -222,8 +222,8 @@ function Login() {
                         <div className="flex items-center justify-between text-[14px] pt-2 pb-2">
                             <label className="flex items-center gap-3 cursor-pointer group">
                                 <div className="relative flex items-center justify-center">
-                                    <input 
-                                        type="checkbox" 
+                                    <input
+                                        type="checkbox"
                                         className="peer w-[20px] h-[20px] rounded-[6px] appearance-none checked:bg-[#ff5a00] checked:border-[#ff5a00] transition-all cursor-pointer"
                                         style={{
                                             background: 'rgba(255,255,255,0.1)',

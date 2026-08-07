@@ -279,7 +279,7 @@ summary.forEach((item) => {
 
 });
 
-    return (        <div className="min-h-screen bg-slate-100 p-8">
+    return (        <div className="min-h-screen bg-slate-100 p-4 md:p-8">
 
             <Navbar />
 
@@ -402,38 +402,40 @@ summary.forEach((item) => {
 
                             </div>
 
-                            <button
+                            <div className="flex flex-col md:flex-row gap-3 mt-4">
+                                <button
 
-                                onClick={() => {
+                                    onClick={() => {
 
-                                    navigator.clipboard.writeText(
-                                        attendanceLink
-                                    );
+                                        navigator.clipboard.writeText(
+                                            attendanceLink
+                                        );
 
-                                    alert(
-                                        "Attendance Link Copied"
-                                    );
+                                        alert(
+                                            "Attendance Link Copied"
+                                        );
 
-                                }}
+                                    }}
 
-                                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl"
+                                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl w-full md:w-auto"
 
-                            >
+                                >
 
-                                📋 Copy Attendance Link
+                                    📋 Copy Attendance Link
 
-                            </button>
-                            <button
+                                </button>
+                                <button
 
-    onClick={endSession}
+        onClick={endSession}
 
-    className="mt-3 ml-3 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl"
+        className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl w-full md:w-auto"
 
->
+    >
 
-    🛑 End Session
+        🛑 End Session
 
-</button>
+    </button>
+                            </div>
 
                         </div>
 

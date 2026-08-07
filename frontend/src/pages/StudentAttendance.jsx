@@ -338,9 +338,9 @@ if (attendanceDone) {
 
     return (
 
-        <div className="min-h-screen bg-slate-100 flex justify-center items-center">
+        <div className="min-h-screen bg-slate-100 flex justify-center items-center py-6 md:py-10 px-4">
 
-            <div className="bg-white shadow-xl rounded-2xl p-10 w-[650px] text-center">
+            <div className="bg-white shadow-xl rounded-2xl p-6 md:p-10 w-full max-w-2xl text-center">
 
                 <div className="text-7xl">
 
@@ -404,11 +404,11 @@ if (attendanceDone) {
 
     return (
 
-        <div className="min-h-screen bg-slate-100 flex justify-center items-center py-10">
+        <div className="min-h-screen bg-slate-100 flex justify-center items-center py-6 md:py-10 px-4">
 
-            <div className="bg-white shadow-xl rounded-2xl p-10 w-[700px]">
+            <div className="bg-white shadow-xl rounded-2xl p-6 md:p-10 w-full max-w-2xl">
 
-                <h1 className="text-4xl font-bold text-blue-700">
+                <h1 className="text-3xl md:text-4xl font-bold text-blue-700">
 
                     🎓 Attendance Magic
 
