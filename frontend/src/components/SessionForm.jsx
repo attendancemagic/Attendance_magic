@@ -16,9 +16,9 @@ function SessionForm({
 
     return (
 
-        <div className="bg-white rounded-2xl shadow-lg p-8">
+        <div className="bg-[rgba(255,255,255,0.08)] backdrop-blur-[22px] border border-[rgba(255,255,255,0.18)] shadow-[0_30px_80px_rgba(0,0,0,0.35)] rounded-2xl p-8 relative z-10">
 
-            <h2 className="text-2xl font-bold text-gray-800 mb-8">
+            <h2 className="text-2xl font-bold text-white mb-8">
 
                 🚀 Start Attendance Session
 
@@ -89,7 +89,7 @@ function SessionForm({
 
                 <div>
 
-                    <label className="block font-semibold mb-2">
+                    <label className="block font-semibold mb-2 text-gray-200">
 
                         📍 Attendance Radius
 
@@ -99,7 +99,7 @@ function SessionForm({
 
                         type="number"
 
-                        className="w-full border rounded-xl p-3"
+                        className="w-full bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.15)] text-white focus:bg-[rgba(255,255,255,0.15)] focus:border-[#ff5a00] transition-all outline-none rounded-xl p-3"
 
                         value={radius}
 
@@ -109,7 +109,7 @@ function SessionForm({
 
                     />
 
-                    <p className="text-sm text-gray-500 mt-2">
+                    <p className="text-sm text-gray-400 mt-2">
 
                         Students must be inside this radius.
 
@@ -119,7 +119,7 @@ function SessionForm({
 
                 <div>
 
-                    <label className="block font-semibold mb-2">
+                    <label className="block font-semibold mb-2 text-gray-200">
 
                         ⏱ Session Duration
 
@@ -129,7 +129,7 @@ function SessionForm({
 
                         type="number"
 
-                        className="w-full border rounded-xl p-3"
+                        className="w-full bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.15)] text-white focus:bg-[rgba(255,255,255,0.15)] focus:border-[#ff5a00] transition-all outline-none rounded-xl p-3"
 
                         value={duration}
 
@@ -139,7 +139,7 @@ function SessionForm({
 
                     />
 
-                    <p className="text-sm text-gray-500 mt-2">
+                    <p className="text-sm text-gray-400 mt-2">
 
                         Attendance closes automatically.
 
@@ -153,7 +153,7 @@ function SessionForm({
 
                 onClick={startSession}
 
-                className="mt-10 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl"
+                className="mt-10 w-full bg-gradient-to-r from-[#ff5a00] to-[#e63a00] hover:shadow-[0_12px_30px_rgba(255,90,0,0.4)] hover:-translate-y-[2px] transition-all text-white font-bold py-4 rounded-xl"
 
             >
 

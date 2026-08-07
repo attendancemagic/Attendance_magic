@@ -63,21 +63,24 @@ export default function StudentRegistration() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-100 flex flex-col justify-center items-center py-6 md:py-10 px-4">
-            <div className="bg-white shadow-2xl rounded-3xl p-6 md:p-10 w-full max-w-4xl">
-                <h1 className="text-3xl md:text-4xl font-extrabold text-center mb-2 text-blue-900">📝 Student Registration</h1>
-                <p className="text-gray-500 text-center mb-8 text-lg">Register your details and face to enable magical attendance.</p>
+        <div className="min-h-screen bg-black flex flex-col justify-center items-center py-6 md:py-10 px-4 relative overflow-hidden">
+            {/* Subtle background effects */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.6)_100%)] pointer-events-none"></div>
+            
+            <div className="bg-[rgba(255,255,255,0.08)] backdrop-blur-[22px] border border-[rgba(255,255,255,0.18)] shadow-[0_30px_80px_rgba(0,0,0,0.35)] rounded-3xl p-6 md:p-10 w-full max-w-4xl relative z-10">
+                <h1 className="text-3xl md:text-4xl font-extrabold text-center mb-2 text-white">📝 Student Registration</h1>
+                <p className="text-gray-300 text-center mb-8 text-lg">Register your details and face to enable magical attendance.</p>
             {registrationSuccess ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center">
                     <div className="text-6xl mb-4">✅</div>
-                    <h2 className="text-3xl font-bold text-green-700 mb-4">Registration Successful</h2>
-                    <p className="text-xl text-gray-700 mb-2">Your face is now officially locked in the system.</p>
-                    <p className="text-lg text-gray-500 italic font-semibold">Now go and actually attend your classes! No proxies for you anymore! 😎</p>
+                    <h2 className="text-3xl font-bold text-[#ff5a00] mb-4">Registration Successful</h2>
+                    <p className="text-xl text-gray-200 mb-2">Your face is now officially locked in the system.</p>
+                    <p className="text-lg text-gray-400 italic font-semibold">Now go and actually attend your classes! No proxies for you anymore! 😎</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                     <div className="flex flex-col items-center">
-                        <div className="relative rounded-2xl overflow-hidden shadow-xl border-4 border-gray-100 bg-gray-50 w-full aspect-[4/3] flex items-center justify-center">
+                        <div className="relative rounded-2xl overflow-hidden shadow-xl border border-[rgba(255,255,255,0.18)] bg-black/50 w-full aspect-[4/3] flex items-center justify-center">
                         {!capturedImage ? (
                             <>
                                 <Webcam
@@ -102,11 +105,11 @@ export default function StudentRegistration() {
                     
                     <div className="mt-4 flex justify-center w-full">
                         {!capturedImage ? (
-                            <button onClick={handleCapture} className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-bold shadow-md flex items-center text-lg">
+                            <button onClick={handleCapture} className="bg-gradient-to-r from-[#ff5a00] to-[#e63a00] hover:shadow-[0_12px_30px_rgba(255,90,0,0.4)] hover:-translate-y-[2px] transition-all text-white px-8 py-3 rounded-xl font-bold shadow-md flex items-center text-lg">
                                 📸 Capture Photo
                             </button>
                         ) : (
-                            <button onClick={() => setCapturedImage(null)} className="bg-gray-600 hover:bg-gray-700 text-white px-8 py-3 rounded-xl font-bold shadow-md flex items-center text-lg">
+                            <button onClick={() => setCapturedImage(null)} className="bg-white/10 hover:bg-white/20 border border-white/20 transition-all text-white px-8 py-3 rounded-xl font-bold shadow-md flex items-center text-lg">
                                 🔄 Retake Photo
                             </button>
                         )}
@@ -115,29 +118,29 @@ export default function StudentRegistration() {
 
                 <div className="space-y-4">
                     <div>
-                        <label className="block font-semibold mb-2">Full Name</label>
+                        <label className="block font-semibold mb-2 text-gray-200">Full Name</label>
                         <input
                             type="text"
-                            className="w-full border rounded-xl p-3"
+                            className="w-full bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.15)] text-white focus:bg-[rgba(255,255,255,0.15)] focus:border-[#ff5a00] transition-all outline-none rounded-xl p-3"
                             placeholder="Enter your full name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
                     </div>
                     <div>
-                        <label className="block font-semibold mb-2">Roll Number</label>
+                        <label className="block font-semibold mb-2 text-gray-200">Roll Number</label>
                         <input
                             type="text"
-                            className="w-full border rounded-xl p-3"
+                            className="w-full bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.15)] text-white focus:bg-[rgba(255,255,255,0.15)] focus:border-[#ff5a00] transition-all outline-none rounded-xl p-3"
                             placeholder="Enter Roll Number"
                             value={rollNumber}
                             onChange={(e) => setRollNumber(e.target.value)}
                         />
                     </div>
                     <div>
-                        <label className="block font-semibold mb-2">Department</label>
+                        <label className="block font-semibold mb-2 text-gray-200">Department</label>
                         <select
-                            className="w-full border rounded-xl p-3"
+                            className="w-full bg-[#1a1a1a] border border-[rgba(255,255,255,0.15)] text-white focus:border-[#ff5a00] transition-all outline-none rounded-xl p-3"
                             value={department}
                             onChange={(e) => setDepartment(e.target.value)}
                         >
@@ -147,9 +150,9 @@ export default function StudentRegistration() {
                         </select>
                     </div>
                     <div>
-                        <label className="block font-semibold mb-2">Section</label>
+                        <label className="block font-semibold mb-2 text-gray-200">Section</label>
                         <select
-                            className="w-full border rounded-xl p-3"
+                            className="w-full bg-[#1a1a1a] border border-[rgba(255,255,255,0.15)] text-white focus:border-[#ff5a00] transition-all outline-none rounded-xl p-3"
                             value={section}
                             onChange={(e) => setSection(e.target.value)}
                         >
@@ -163,7 +166,7 @@ export default function StudentRegistration() {
                     <button
                         onClick={handleRegister}
                         disabled={isRegistering || !capturedImage}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold mt-4 disabled:bg-gray-400"
+                        className="w-full bg-gradient-to-r from-[#ff5a00] to-[#e63a00] hover:shadow-[0_12px_30px_rgba(255,90,0,0.4)] hover:-translate-y-[2px] transition-all text-white py-3 rounded-xl font-bold mt-4 disabled:bg-gray-600 disabled:from-gray-600 disabled:to-gray-600 disabled:shadow-none disabled:translate-y-0"
                     >
                         {isRegistering ? "Submitting..." : "✅ Submit Registration"}
                     </button>

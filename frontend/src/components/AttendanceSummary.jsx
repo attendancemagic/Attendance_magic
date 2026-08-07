@@ -40,7 +40,7 @@ function AttendanceSummary({
 
         <div className="mt-8">
 
-            <h2 className="text-2xl font-bold mb-6">
+            <h2 className="text-2xl font-bold mb-6 text-white">
 
                 📊 Attendance Summary
 
@@ -53,7 +53,7 @@ function AttendanceSummary({
 
         <div key={date} className="col-span-full">
 
-            <h2 className="text-xl font-bold text-gray-700 mb-4">
+            <h2 className="text-xl font-bold text-gray-300 mb-4">
 
                 {getDateLabel(date)}
 
@@ -66,23 +66,22 @@ function AttendanceSummary({
                     groupedSummary[date].map((item, index) => (
 
                         <div
-                            key={index}
-                            className="bg-white rounded-2xl shadow-lg p-6"
+                            className="bg-[rgba(255,255,255,0.08)] backdrop-blur-[22px] border border-[rgba(255,255,255,0.18)] rounded-2xl shadow-lg p-6 relative z-10"
                         >
 
-                            <h3 className="text-xl font-bold text-blue-700">
+                            <h3 className="text-xl font-bold text-white">
 
                                 {item.department} - {item.section}
 
                             </h3>
 
-                            <p className="text-gray-500 mt-2">
+                            <p className="text-gray-400 mt-2">
 
                                 Students Present
 
                             </p>
 
-                            <h1 className="text-5xl font-bold mt-4 text-green-600">
+                            <h1 className="text-5xl font-extrabold mt-4 bg-gradient-to-r from-[#ff5a00] to-[#e63a00] bg-clip-text text-transparent w-max">
 
                                 {item.student_count}
 
@@ -98,7 +97,7 @@ function AttendanceSummary({
                                     )
                                 }
 
-                                className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl"
+                                className="mt-6 w-full bg-gradient-to-r from-[#ff5a00] to-[#e63a00] hover:shadow-[0_12px_30px_rgba(255,90,0,0.4)] hover:-translate-y-[2px] transition-all text-white py-3 rounded-xl font-bold"
 
                             >
 

@@ -279,11 +279,15 @@ summary.forEach((item) => {
 
 });
 
-    return (        <div className="min-h-screen bg-slate-100 p-4 md:p-8">
+    return (        <div className="min-h-screen bg-black p-4 md:p-8 relative overflow-hidden">
+            {/* Subtle background effects */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.6)_100%)] pointer-events-none"></div>
+            
+            <div className="relative z-10">
 
             <Navbar />
 
-            <h1 className="text-3xl font-bold mb-8">
+            <h1 className="text-3xl font-bold mb-8 text-white">
 
                 Welcome Back 👋
 
@@ -330,15 +334,15 @@ summary.forEach((item) => {
 
                 attendanceLink && (
 
-                    <div className="bg-white rounded-2xl shadow-lg p-8 mt-8">
+                    <div className="bg-[rgba(255,255,255,0.08)] backdrop-blur-[22px] border border-[rgba(255,255,255,0.18)] shadow-[0_30px_80px_rgba(0,0,0,0.35)] rounded-2xl p-8 mt-8">
 
-                        <h2 className="text-2xl font-bold mb-6">
+                        <h2 className="text-2xl font-bold mb-6 text-white">
 
                             🟢 Live Attendance Session
 
                         </h2>
 
-                        <div className="space-y-4">
+                        <div className="space-y-4 text-gray-300">
 
                             <p>
 
@@ -384,7 +388,7 @@ summary.forEach((item) => {
 
                             <div>
 
-                                <label className="font-semibold">
+                                <label className="font-semibold text-gray-200">
 
                                     Attendance Link
 
@@ -392,7 +396,7 @@ summary.forEach((item) => {
 
                                 <input
 
-                                    className="w-full border rounded-lg p-3 mt-2"
+                                    className="w-full bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.15)] text-white outline-none rounded-lg p-3 mt-2"
 
                                     readOnly
 
@@ -417,7 +421,7 @@ summary.forEach((item) => {
 
                                     }}
 
-                                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl w-full md:w-auto"
+                                    className="bg-gradient-to-r from-[#ff5a00] to-[#e63a00] hover:shadow-[0_12px_30px_rgba(255,90,0,0.4)] hover:-translate-y-[2px] transition-all text-white px-6 py-3 rounded-xl w-full md:w-auto font-bold"
 
                                 >
 
@@ -445,7 +449,7 @@ summary.forEach((item) => {
 
             }
 
-            <hr className="my-10" />
+            <hr className="my-10 border-[rgba(255,255,255,0.15)]" />
 
             <AttendanceSummary
 
@@ -461,7 +465,7 @@ summary.forEach((item) => {
         placeholder="🔍 Search by Name or Roll Number"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full border rounded-xl p-3"
+        className="w-full bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.15)] text-white focus:bg-[rgba(255,255,255,0.15)] focus:border-[#ff5a00] transition-all outline-none rounded-xl p-3"
     />
 
 </div>
@@ -478,7 +482,7 @@ summary.forEach((item) => {
 </div>
 
         </div>
-
+        </div>
     );
 
 }

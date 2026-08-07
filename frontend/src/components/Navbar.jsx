@@ -48,17 +48,17 @@ function Navbar() {
 
     return (
 
-        <nav className="bg-white shadow-lg rounded-2xl p-5 flex justify-between items-center">
+        <nav className="bg-[rgba(255,255,255,0.08)] backdrop-blur-[22px] border border-[rgba(255,255,255,0.18)] shadow-lg rounded-2xl p-5 flex flex-col md:flex-row gap-4 justify-between items-center mb-8 relative z-10">
 
             <div>
 
-                <h1 className="text-3xl font-bold text-blue-700">
+                <h1 className="text-3xl font-bold text-white">
 
                     🎓 Attendance Magic
 
                 </h1>
 
-                <p className="text-gray-500">
+                <p className="text-gray-400">
 
                     Faculty Portal
 
@@ -68,7 +68,7 @@ function Navbar() {
 
             <div className="flex items-center gap-6">
 
-                <div className="text-right">
+                <div className="text-center md:text-right text-gray-200">
 
                     <h2 className="font-bold">
 
@@ -76,7 +76,7 @@ function Navbar() {
 
                     </h2>
 
-                    <p className="text-gray-500">
+                    <p className="text-gray-400">
 
                         Logged In
 
@@ -88,7 +88,7 @@ function Navbar() {
 
                     onClick={logout}
 
-                    className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-xl"
+                    className="bg-white/10 hover:bg-white/20 border border-white/20 transition-all text-white px-5 py-2 rounded-xl"
 
                 >
 

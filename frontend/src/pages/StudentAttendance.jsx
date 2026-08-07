@@ -338,9 +338,11 @@ if (attendanceDone) {
 
     return (
 
-        <div className="min-h-screen bg-slate-100 flex justify-center items-center py-6 md:py-10 px-4">
+        <div className="min-h-screen bg-black flex justify-center items-center py-6 md:py-10 px-4 relative overflow-hidden">
+            {/* Subtle background effects */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.6)_100%)] pointer-events-none"></div>
 
-            <div className="bg-white shadow-xl rounded-2xl p-6 md:p-10 w-full max-w-2xl text-center">
+            <div className="bg-[rgba(255,255,255,0.08)] backdrop-blur-[22px] border border-[rgba(255,255,255,0.18)] shadow-[0_30px_80px_rgba(0,0,0,0.35)] rounded-2xl p-6 md:p-10 w-full max-w-2xl text-center relative z-10">
 
                 <div className="text-7xl">
 
@@ -354,13 +356,13 @@ if (attendanceDone) {
 
                 </h1>
 
-                <p className="text-gray-600 mt-5 text-lg">
+                <p className="text-gray-300 mt-5 text-lg">
 
                     Your attendance has been recorded successfully.
 
                 </p>
 
-                <div className="bg-slate-100 rounded-xl p-5 mt-8 text-left">
+                <div className="bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.15)] rounded-xl p-5 mt-8 text-left text-gray-200">
 
                     <p>
 
@@ -404,31 +406,33 @@ if (attendanceDone) {
 
     return (
 
-        <div className="min-h-screen bg-slate-100 flex justify-center items-center py-6 md:py-10 px-4">
+        <div className="min-h-screen bg-black flex justify-center items-center py-6 md:py-10 px-4 relative overflow-hidden">
+            {/* Subtle background effects */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.6)_100%)] pointer-events-none"></div>
 
-            <div className="bg-white shadow-xl rounded-2xl p-6 md:p-10 w-full max-w-2xl">
+            <div className="bg-[rgba(255,255,255,0.08)] backdrop-blur-[22px] border border-[rgba(255,255,255,0.18)] shadow-[0_30px_80px_rgba(0,0,0,0.35)] rounded-2xl p-6 md:p-10 w-full max-w-2xl relative z-10">
 
-                <h1 className="text-3xl md:text-4xl font-bold text-blue-700">
+                <h1 className="text-3xl md:text-4xl font-bold text-white">
 
                     🎓 Attendance Magic
 
                 </h1>
 
-                <p className="text-gray-500 mt-2">
+                <p className="text-gray-400 mt-2">
 
                     Student Attendance
 
                 </p>
 
-                <hr className="my-6" />
+                <hr className="my-6 border-[rgba(255,255,255,0.15)]" />
 
-                <h2 className="text-2xl font-bold">
+                <h2 className="text-2xl font-bold text-white">
 
                     Session Details
 
                 </h2>
 
-                <div className="mt-5 space-y-3">
+                <div className="mt-5 space-y-3 text-gray-300">
 
                     {/* <p>
 
@@ -476,21 +480,21 @@ if (attendanceDone) {
 
                 </div>
 
-                <hr className="my-8" />
+                <hr className="my-8 border-[rgba(255,255,255,0.15)]" />
 
-                <h2 className="text-2xl font-bold mb-5">
+                <h2 className="text-2xl font-bold mb-5 text-white">
 
                     📍 Verify Your Location
 
                 </h2>
 
-                <p className="text-gray-500 mb-4">
+                <p className="text-gray-400 mb-4">
 
                     Please verify your location before entering your attendance details.
 
                 </p>
 
-                <div className="space-y-4">
+                <div className="space-y-4 text-gray-300">
 
                     <p>
 
@@ -500,7 +504,7 @@ if (attendanceDone) {
 
                             verified ?
 
-                                <span className="text-green-600 font-bold">
+                                <span className="text-[#ff5a00] font-bold">
 
                                     ✅ Verified
 
@@ -508,7 +512,7 @@ if (attendanceDone) {
 
                                 :
 
-                                <span className="text-orange-600 font-bold">
+                                <span className="text-gray-400 font-bold">
 
                                     Waiting for Verification
 
@@ -618,11 +622,11 @@ if (attendanceDone) {
 
                                 {faceImage && !faceVerified && (
                                     <>
-                                        <h2 className="text-2xl font-bold mt-8 mb-4">Enter Roll Number to Verify</h2>
+                                        <h2 className="text-2xl font-bold mt-8 mb-4 text-white">Enter Roll Number to Verify</h2>
                                         <div className="space-y-4">
                                             <input
                                                 type="text"
-                                                className="w-full border rounded-xl p-3"
+                                                className="w-full bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.15)] text-white focus:bg-[rgba(255,255,255,0.15)] focus:border-[#ff5a00] transition-all outline-none rounded-xl p-3"
                                                 placeholder="Enter your Roll Number"
                                                 value={inputRollNumber}
                                                 onChange={(e) => setInputRollNumber(e.target.value)}
@@ -630,7 +634,7 @@ if (attendanceDone) {
                                             <button
                                                 onClick={verifyFace1to1}
                                                 disabled={isMatching || !inputRollNumber}
-                                                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 rounded-xl font-bold"
+                                                className="w-full bg-gradient-to-r from-[#ff5a00] to-[#e63a00] hover:shadow-[0_12px_30px_rgba(255,90,0,0.4)] hover:-translate-y-[2px] transition-all disabled:bg-gray-600 disabled:from-gray-600 disabled:to-gray-600 disabled:shadow-none disabled:translate-y-0 text-white py-3 rounded-xl font-bold"
                                             >
                                                 {isMatching ? "Verifying..." : "Verify Face"}
                                             </button>
@@ -640,15 +644,15 @@ if (attendanceDone) {
 
                                 {faceImage && faceVerified && (
                                     <>
-                                        <h2 className="text-2xl font-bold mt-8 mb-6">
+                                        <h2 className="text-2xl font-bold mt-8 mb-6 text-white">
                                             Student Details
                                         </h2>
-                                        <div className="space-y-5">
+                                        <div className="space-y-5 text-gray-200">
                                             <div>
                                                 <label className="block font-semibold mb-2">Full Name</label>
                                                 <input
                                                     type="text"
-                                                    className="w-full border rounded-xl p-3 bg-gray-100"
+                                                    className="w-full bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.1)] text-gray-400 outline-none rounded-xl p-3"
                                                     placeholder="Auto-filled"
                                                     value={name}
                                                     readOnly
@@ -658,7 +662,7 @@ if (attendanceDone) {
                                                 <label className="block font-semibold mb-2">Roll Number</label>
                                                 <input
                                                     type="text"
-                                                    className="w-full border rounded-xl p-3 bg-gray-100"
+                                                    className="w-full bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.1)] text-gray-400 outline-none rounded-xl p-3"
                                                     placeholder="Auto-filled"
                                                     value={rollNumber}
                                                     readOnly
@@ -668,7 +672,7 @@ if (attendanceDone) {
                                                 <label className="block font-semibold mb-2">Department</label>
                                                 <input
                                                     type="text"
-                                                    className="w-full border rounded-xl p-3 bg-gray-100"
+                                                    className="w-full bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.1)] text-gray-400 outline-none rounded-xl p-3"
                                                     placeholder="Auto-filled"
                                                     value={department}
                                                     readOnly
@@ -678,7 +682,7 @@ if (attendanceDone) {
                                                 <label className="block font-semibold mb-2">Section</label>
                                                 <input
                                                     type="text"
-                                                    className="w-full border rounded-xl p-3 bg-gray-100"
+                                                    className="w-full bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.1)] text-gray-400 outline-none rounded-xl p-3"
                                                     placeholder="Auto-filled"
                                                     value={section}
                                                     readOnly
@@ -687,7 +691,7 @@ if (attendanceDone) {
                                             <button
                                                 onClick={markAttendance}
                                                 disabled={!rollNumber || isMatching}
-                                                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white py-3 rounded-xl text-lg font-semibold"
+                                                className="w-full bg-gradient-to-r from-[#ff5a00] to-[#e63a00] hover:shadow-[0_12px_30px_rgba(255,90,0,0.4)] hover:-translate-y-[2px] transition-all disabled:bg-gray-600 disabled:from-gray-600 disabled:to-gray-600 disabled:shadow-none disabled:translate-y-0 text-white py-3 rounded-xl text-lg font-semibold"
                                             >
                                                 ✅ Submit Attendance
                                             </button>

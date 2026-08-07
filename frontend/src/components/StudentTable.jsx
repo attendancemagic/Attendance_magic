@@ -59,17 +59,17 @@ const downloadExcel = async () => {
 
     return (
 
-        <div className="bg-white rounded-2xl shadow-lg p-8 mt-8">
+        <div className="bg-[rgba(255,255,255,0.08)] backdrop-blur-[22px] border border-[rgba(255,255,255,0.18)] shadow-lg rounded-2xl p-8 mt-8 relative z-10">
 
             <div className="flex justify-between items-center mb-6">
 
-                <h2 className="text-2xl font-bold">
+                <h2 className="text-2xl font-bold text-white">
 
                     👨‍🎓 Student List
 
                 </h2>
 
-                <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-semibold">
+                <span className="bg-[rgba(255,255,255,0.1)] text-white border border-[rgba(255,255,255,0.2)] px-4 py-2 rounded-lg font-semibold">
 
                     Total Students : {students.length}
 
@@ -81,7 +81,7 @@ const downloadExcel = async () => {
                 <button
     onClick={downloadExcel}
 
-    className="mb-4 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg"
+    className="mb-4 bg-gradient-to-r from-[#ff5a00] to-[#e63a00] hover:shadow-[0_12px_30px_rgba(255,90,0,0.4)] hover:-translate-y-[2px] transition-all text-white px-5 py-2 rounded-lg font-bold"
 
 >
 
@@ -93,7 +93,7 @@ const downloadExcel = async () => {
 
                     <thead>
 
-                        <tr className="bg-blue-600 text-white">
+                        <tr className="bg-[rgba(255,255,255,0.1)] text-gray-200 border-b border-[rgba(255,255,255,0.18)] text-left">
 
                             <th className="p-3">S.No</th>
                             <th className="p-3">Name</th>
@@ -114,7 +114,7 @@ const downloadExcel = async () => {
 
                                 <tr
                                     key={student.id}
-                                    className="border-b hover:bg-gray-100"
+                                    className="border-b border-[rgba(255,255,255,0.1)] hover:bg-[rgba(255,255,255,0.05)] text-gray-300 transition-colors"
                                 >
 
                                     <td className="p-3 text-center">
