@@ -141,15 +141,12 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # CORS
 # =========================
 
-CORS_ALLOWED_ORIGINS = config(
-    "CORS_ALLOWED_ORIGINS",
-    default="http://localhost:5173,https://attendance-magic-xi.vercel.app"
-).split(",")
+CORS_ALLOW_ALL_ORIGINS = True
 
-CSRF_TRUSTED_ORIGINS = config(
-    "CSRF_TRUSTED_ORIGINS",
-    default="http://localhost:5173,https://attendance-magic-xi.vercel.app"
-).split(",")
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "https://attendance-magic-xi.vercel.app"
+]
 
 # =========================
 # DRF
