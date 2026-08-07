@@ -4,7 +4,7 @@ import API from "../services/api";
 import { toast, Toaster } from "react-hot-toast";
 import { User, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 
-function Login() {
+function Login() { 
     const navigate = useNavigate();
 
     const [username, setUsername] = useState("");
