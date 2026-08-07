@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const baseURL = import.meta.env.MODE === 'development' 
-    ? '/api/' 
-    : 'https://attendance-magic.vercel.app/api/';
+const baseURL = import.meta.env.MODE === 'development'
+    ? '/api/'
+    : 'https://attendance-magic-aehq.vercel.app/api/';
 
 const API = axios.create({
     baseURL: baseURL,

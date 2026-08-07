@@ -107,7 +107,7 @@ def start_session(request):
         )
 
         attendance_link = (
-            f"https://attendance-magic-c8tj.vercel.app/attendance/{session.id}"
+            f"https://attendance-magic-xi.vercel.app/attendance/{session.id}"
         )
 
         return Response({

@@ -42,7 +42,7 @@ const [selectedSection, setSelectedSection] = useState(null);
             if (response.data && response.data.id) {
                 setSessionActive(true);
                 setExpiresAt(response.data.expires_at);
-                const link = `https://attendance-magic-c8tj.vercel.app/attendance/${response.data.id}`;
+                const link = `https://attendance-magic-xi.vercel.app/attendance/${response.data.id}`;
                 setAttendanceLink(link);
             }
         } catch (error) {

@@ -146,12 +146,12 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 CORS_ALLOWED_ORIGINS = config(
     "CORS_ALLOWED_ORIGINS",
-    default="http://localhost:5173"
+    default="http://localhost:5173,https://attendance-magic-xi.vercel.app"
 ).split(",")
 
 CSRF_TRUSTED_ORIGINS = config(
     "CSRF_TRUSTED_ORIGINS",
-    default="http://localhost:5173"
+    default="http://localhost:5173,https://attendance-magic-xi.vercel.app"
 ).split(",")
 
 # =========================
