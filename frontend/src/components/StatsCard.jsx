@@ -11,16 +11,16 @@ function StatsCard({
     return (
 
         <div
-            className="bg-[rgba(255,255,255,0.08)] backdrop-blur-[22px] border border-[rgba(255,255,255,0.18)] rounded-xl shadow-lg p-6 text-white relative z-10"
+            className="bg-white rounded-3xl shadow-[0_4px_20px_rgb(0,0,0,0.08)] border border-gray-100 p-6"
         >
 
-            <h2 className="text-lg">
+            <h2 className="text-lg text-gray-500 font-semibold">
 
                 {title}
 
             </h2>
 
-            <h1 className="text-4xl font-extrabold mt-3 bg-gradient-to-r from-[#ff5a00] to-[#e63a00] bg-clip-text text-transparent">
+            <h1 className="text-4xl font-extrabold mt-3 text-blue-600">
 
                 {value}
 

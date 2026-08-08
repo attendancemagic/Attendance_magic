@@ -137,7 +137,7 @@ function Login() {
                 <div
                     className="w-full p-8 sm:p-10"
                     style={{
-                        background: 'rgba(255,255,255,0.25)',
+                        background: 'rgba(255,255,255,0.5)',
                         backdropFilter: 'blur(22px)',
                         border: '1px solid rgba(255,255,255,0.18)',
                         borderRadius: '28px',

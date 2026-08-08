@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { FiCamera } from "react-icons/fi";
 
 const CHALLENGES = [
     { id: "TURN_LEFT", text: "Turn Head Left" },
@@ -148,7 +149,7 @@ export default function FacialChallenge({ onChallengeSuccess }) {
                         if (success) {
                             successTriggered.current = true;
                             setLivenessVerified(true);
-                            setStatus("✅ Liveness Verified!");
+                            setStatus("Liveness Verified!");
                             if (cameraRef.current) cameraRef.current.stop();
                             
                             // Wait a moment so user sees the success message before moving to the next step
@@ -235,9 +236,9 @@ export default function FacialChallenge({ onChallengeSuccess }) {
                     </p>
                     <button
                         onClick={handleCapture}
-                        className="mt-6 bg-blue-600 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-blue-700 transition"
+                        className="mt-6 bg-blue-600 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-blue-700 transition flex items-center gap-2"
                     >
-                        📸 Capture Photo
+                        <FiCamera className="w-5 h-5" /> Capture Photo
                     </button>
                 </>
             ) : (

@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { FiBarChart2, FiCalendar, FiUsers, FiClock } from "react-icons/fi";
+
 function getDateLabel(date) {
 
     const today = new Date();
@@ -17,17 +20,17 @@ function getDateLabel(date) {
 
     if (currentString === todayString) {
 
-        return `📅 Today (${formattedDate})`;
+        return <span className="flex items-center"><FiCalendar className="mr-2 text-blue-500" /> Today ({formattedDate})</span>;
 
     }
 
     if (currentString === yesterdayString) {
 
-        return `📅 Yesterday (${formattedDate})`;
+        return <span className="flex items-center"><FiCalendar className="mr-2 text-gray-500" /> Yesterday ({formattedDate})</span>;
 
     }
 
-    return `📅 ${formattedDate}`;
+    return <span className="flex items-center"><FiCalendar className="mr-2 text-gray-500" /> {formattedDate}</span>;
 
 }
 
@@ -35,25 +38,44 @@ function AttendanceSummary({
     groupedSummary,
     fetchStudents
 }) {
+    const [showHistory, setShowHistory] = useState(false);
+    
+    const todayString = new Date().toISOString().split("T")[0];
+    
+    const displayDates = Object.keys(groupedSummary).filter(date => {
+        if (showHistory) return true;
+        return new Date(date).toISOString().split("T")[0] === todayString;
+    }).sort((a, b) => new Date(b) - new Date(a)); // Sort descending
 
     return (
 
         <div className="mt-8">
 
-            <h2 className="text-2xl font-bold mb-6 text-white">
-
-                📊 Attendance Summary
-
-            </h2>
+            <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                    <FiBarChart2 className="text-blue-600 w-8 h-8" />
+                    <h2 className="text-2xl font-bold text-gray-900">
+                        Attendance Summary
+                    </h2>
+                </div>
+                <button 
+                    onClick={() => setShowHistory(!showHistory)}
+                    className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                    <FiClock className="w-4 h-4" />
+                    {showHistory ? "Hide History" : "View History"}
+                </button>
+            </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
                {
-    Object.keys(groupedSummary).map((date) => (
+    displayDates.length > 0 ? (
+        displayDates.map((date) => (
 
         <div key={date} className="col-span-full">
 
-            <h2 className="text-xl font-bold text-gray-300 mb-4">
+            <h2 className="text-xl font-bold text-gray-700 mb-4 flex items-center">
 
                 {getDateLabel(date)}
 
@@ -66,22 +88,23 @@ function AttendanceSummary({
                     groupedSummary[date].map((item, index) => (
 
                         <div
-                            className="bg-[rgba(255,255,255,0.08)] backdrop-blur-[22px] border border-[rgba(255,255,255,0.18)] rounded-2xl shadow-lg p-6 relative z-10"
+                            className="bg-white border border-gray-100 rounded-3xl shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-6"
+                            key={index}
                         >
 
-                            <h3 className="text-xl font-bold text-white">
+                            <h3 className="text-xl font-bold text-gray-900">
 
                                 {item.department} - {item.section}
 
                             </h3>
 
-                            <p className="text-gray-400 mt-2">
+                            <p className="text-gray-500 mt-2 font-medium">
 
                                 Students Present
 
                             </p>
 
-                            <h1 className="text-5xl font-extrabold mt-4 bg-gradient-to-r from-[#ff5a00] to-[#e63a00] bg-clip-text text-transparent w-max">
+                            <h1 className="text-5xl font-extrabold mt-4 text-blue-600 w-max">
 
                                 {item.student_count}
 
@@ -97,11 +120,11 @@ function AttendanceSummary({
                                     )
                                 }
 
-                                className="mt-6 w-full bg-gradient-to-r from-[#ff5a00] to-[#e63a00] hover:shadow-[0_12px_30px_rgba(255,90,0,0.4)] hover:-translate-y-[2px] transition-all text-white py-3 rounded-xl font-bold"
+                                className="mt-6 w-full bg-blue-50 hover:bg-blue-100 text-blue-700 transition-all py-3 rounded-xl font-bold flex items-center justify-center gap-2"
 
                             >
 
-                                👥 View Students
+                                <FiUsers className="w-5 h-5" /> View Students
 
                             </button>
 
@@ -116,6 +139,11 @@ function AttendanceSummary({
         </div>
 
     ))
+    ) : (
+        <div className="col-span-full py-8 text-center text-gray-500 font-medium">
+            No attendance sessions found for today.
+        </div>
+    )
 }
             </div>
 

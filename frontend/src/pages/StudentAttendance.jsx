@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import API from "../services/api";
 import * as faceapi from "@vladmandic/face-api";
 import { toast } from "react-hot-toast";
+import { FiAward, FiCheckCircle, FiMapPin, FiClock, FiXCircle, FiRefreshCw, FiAlertTriangle, FiXOctagon, FiHelpCircle } from "react-icons/fi";
 
 function StudentAttendance() {
 
@@ -236,17 +237,21 @@ setSection(response.data.section || "A");
 
     return (
 
-        <div className="min-h-screen flex items-center justify-center bg-slate-100">
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
 
-            <div className="bg-white p-10 rounded-2xl shadow-xl text-center">
+            <div className="bg-white p-10 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] text-center w-full max-w-lg">
+
+                <div className="flex justify-center mb-4">
+                    <FiClock className="w-16 h-16 text-red-500" />
+                </div>
 
                 <h1 className="text-3xl font-bold text-red-600">
 
-                    ⏰ Attendance Session Expired
+                    Attendance Session Expired
 
                 </h1>
 
-                <p className="mt-4 text-gray-600">
+                <p className="mt-4 text-gray-600 text-lg">
 
                     This attendance session has ended.
 
@@ -338,15 +343,13 @@ if (attendanceDone) {
 
     return (
 
-        <div className="min-h-screen bg-black flex justify-center items-center py-6 md:py-10 px-4 relative overflow-hidden">
-            {/* Subtle background effects */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.6)_100%)] pointer-events-none"></div>
+        <div className="min-h-screen bg-slate-50 flex justify-center items-center py-6 md:py-10 px-4 relative">
+            
+            <div className="bg-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-3xl p-6 md:p-10 w-full max-w-2xl text-center relative z-10">
 
-            <div className="bg-[rgba(255,255,255,0.08)] backdrop-blur-[22px] border border-[rgba(255,255,255,0.18)] shadow-[0_30px_80px_rgba(0,0,0,0.35)] rounded-2xl p-6 md:p-10 w-full max-w-2xl text-center relative z-10">
+                <div className="flex justify-center mb-4">
 
-                <div className="text-7xl">
-
-                    ✅
+                    <FiCheckCircle className="text-green-500 w-20 h-20" />
 
                 </div>
 
@@ -356,13 +359,13 @@ if (attendanceDone) {
 
                 </h1>
 
-                <p className="text-gray-300 mt-5 text-lg">
+                <p className="text-gray-600 mt-5 text-lg">
 
                     Your attendance has been recorded successfully.
 
                 </p>
 
-                <div className="bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.15)] rounded-xl p-5 mt-8 text-left text-gray-200">
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 mt-8 text-left text-gray-800">
 
                     <p>
 
@@ -406,33 +409,34 @@ if (attendanceDone) {
 
     return (
 
-        <div className="min-h-screen bg-black flex justify-center items-center py-6 md:py-10 px-4 relative overflow-hidden">
-            {/* Subtle background effects */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.6)_100%)] pointer-events-none"></div>
+        <div className="min-h-screen bg-slate-50 flex justify-center items-center py-6 md:py-10 px-4 relative">
+            
+            <div className="bg-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-3xl p-6 md:p-10 w-full max-w-2xl relative z-10">
 
-            <div className="bg-[rgba(255,255,255,0.08)] backdrop-blur-[22px] border border-[rgba(255,255,255,0.18)] shadow-[0_30px_80px_rgba(0,0,0,0.35)] rounded-2xl p-6 md:p-10 w-full max-w-2xl relative z-10">
+                <div className="flex items-center gap-3 mb-2">
+                    <FiAward className="text-blue-600 w-8 h-8" />
+                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
 
-                <h1 className="text-3xl md:text-4xl font-bold text-white">
+                        Attendance Magic
 
-                    🎓 Attendance Magic
+                    </h1>
+                </div>
 
-                </h1>
-
-                <p className="text-gray-400 mt-2">
+                <p className="text-gray-500 mt-2">
 
                     Student Attendance
 
                 </p>
 
-                <hr className="my-6 border-[rgba(255,255,255,0.15)]" />
+                <hr className="my-6 border-gray-200" />
 
-                <h2 className="text-2xl font-bold text-white">
+                <h2 className="text-2xl font-bold text-gray-900">
 
                     Session Details
 
                 </h2>
 
-                <div className="mt-5 space-y-3 text-gray-300">
+                <div className="mt-5 space-y-3 text-gray-700">
 
                     {/* <p>
 
@@ -480,21 +484,24 @@ if (attendanceDone) {
 
                 </div>
 
-                <hr className="my-8 border-[rgba(255,255,255,0.15)]" />
+                <hr className="my-8 border-gray-200" />
+                
+                <div className="flex items-center gap-3 mb-5">
+                    <FiMapPin className="text-red-500 w-6 h-6" />
+                    <h2 className="text-2xl font-bold text-gray-900">
 
-                <h2 className="text-2xl font-bold mb-5 text-white">
+                        Verify Your Location
 
-                    📍 Verify Your Location
+                    </h2>
+                </div>
 
-                </h2>
-
-                <p className="text-gray-400 mb-4">
+                <p className="text-gray-500 mb-4">
 
                     Please verify your location before entering your attendance details.
 
                 </p>
 
-                <div className="space-y-4 text-gray-300">
+                <div className="space-y-4 text-gray-700">
 
                     <p>
 
@@ -504,18 +511,14 @@ if (attendanceDone) {
 
                             verified ?
 
-                                <span className="text-[#ff5a00] font-bold">
-
-                                    ✅ Verified
-
+                                <span className="text-green-600 font-bold inline-flex items-center gap-1">
+                                    <FiCheckCircle /> Verified
                                 </span>
 
                                 :
 
-                                <span className="text-gray-400 font-bold">
-
-                                    Waiting for Verification
-
+                                <span className="text-orange-600 font-bold inline-flex items-center gap-1">
+                                    <FiClock /> Waiting for Verification
                                 </span>
 
                         }
@@ -547,9 +550,9 @@ if (attendanceDone) {
                     {
                         !verified && distance !== null && (
 
-                            <div className="bg-red-100 text-red-700 p-4 rounded-xl">
+                            <div className="bg-red-100 text-red-700 p-4 rounded-xl flex items-center gap-2">
 
-                                ❌ You are outside the attendance area.
+                                <FiXCircle className="w-5 h-5 flex-shrink-0" /> You are outside the attendance area.
 
                             </div>
 
@@ -612,9 +615,9 @@ if (attendanceDone) {
                                             )}
                                             <button 
                                                 onClick={() => {setFaceImage(null); setName(''); setRollNumber('');}} 
-                                                className="mt-6 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition flex items-center justify-center mx-auto w-full md:w-auto"
+                                                className="mt-6 bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-800 font-bold py-3 px-8 rounded-xl shadow-md transition flex items-center justify-center mx-auto w-full md:w-auto"
                                             >
-                                                🔄 Retake Photo
+                                                <FiRefreshCw className="mr-2" /> Retake Photo
                                             </button>
                                         </div>
                                     )}
@@ -622,11 +625,11 @@ if (attendanceDone) {
 
                                 {faceImage && !faceVerified && (
                                     <>
-                                        <h2 className="text-2xl font-bold mt-8 mb-4 text-white">Enter Roll Number to Verify</h2>
+                                        <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-900">Enter Roll Number to Verify</h2>
                                         <div className="space-y-4">
                                             <input
                                                 type="text"
-                                                className="w-full bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.15)] text-white focus:bg-[rgba(255,255,255,0.15)] focus:border-[#ff5a00] transition-all outline-none rounded-xl p-3"
+                                                className="w-full bg-white border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none rounded-xl p-3"
                                                 placeholder="Enter your Roll Number"
                                                 value={inputRollNumber}
                                                 onChange={(e) => setInputRollNumber(e.target.value)}
@@ -634,7 +637,7 @@ if (attendanceDone) {
                                             <button
                                                 onClick={verifyFace1to1}
                                                 disabled={isMatching || !inputRollNumber}
-                                                className="w-full bg-gradient-to-r from-[#ff5a00] to-[#e63a00] hover:shadow-[0_12px_30px_rgba(255,90,0,0.4)] hover:-translate-y-[2px] transition-all disabled:bg-gray-600 disabled:from-gray-600 disabled:to-gray-600 disabled:shadow-none disabled:translate-y-0 text-white py-3 rounded-xl font-bold"
+                                                className="w-full bg-blue-600 hover:bg-blue-700 hover:-translate-y-[2px] transition-all disabled:bg-gray-400 disabled:shadow-none disabled:translate-y-0 text-white py-3 rounded-xl font-bold shadow-md"
                                             >
                                                 {isMatching ? "Verifying..." : "Verify Face"}
                                             </button>
@@ -644,15 +647,15 @@ if (attendanceDone) {
 
                                 {faceImage && faceVerified && (
                                     <>
-                                        <h2 className="text-2xl font-bold mt-8 mb-6 text-white">
+                                        <h2 className="text-2xl font-bold mt-8 mb-6 text-gray-900">
                                             Student Details
                                         </h2>
-                                        <div className="space-y-5 text-gray-200">
+                                        <div className="space-y-5 text-gray-700">
                                             <div>
                                                 <label className="block font-semibold mb-2">Full Name</label>
                                                 <input
                                                     type="text"
-                                                    className="w-full bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.1)] text-gray-400 outline-none rounded-xl p-3"
+                                                    className="w-full bg-gray-100 border border-gray-300 text-gray-700 outline-none rounded-xl p-3"
                                                     placeholder="Auto-filled"
                                                     value={name}
                                                     readOnly
@@ -662,7 +665,7 @@ if (attendanceDone) {
                                                 <label className="block font-semibold mb-2">Roll Number</label>
                                                 <input
                                                     type="text"
-                                                    className="w-full bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.1)] text-gray-400 outline-none rounded-xl p-3"
+                                                    className="w-full bg-gray-100 border border-gray-300 text-gray-700 outline-none rounded-xl p-3"
                                                     placeholder="Auto-filled"
                                                     value={rollNumber}
                                                     readOnly
@@ -672,7 +675,7 @@ if (attendanceDone) {
                                                 <label className="block font-semibold mb-2">Department</label>
                                                 <input
                                                     type="text"
-                                                    className="w-full bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.1)] text-gray-400 outline-none rounded-xl p-3"
+                                                    className="w-full bg-gray-100 border border-gray-300 text-gray-700 outline-none rounded-xl p-3"
                                                     placeholder="Auto-filled"
                                                     value={department}
                                                     readOnly
@@ -682,7 +685,7 @@ if (attendanceDone) {
                                                 <label className="block font-semibold mb-2">Section</label>
                                                 <input
                                                     type="text"
-                                                    className="w-full bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.1)] text-gray-400 outline-none rounded-xl p-3"
+                                                    className="w-full bg-gray-100 border border-gray-300 text-gray-700 outline-none rounded-xl p-3"
                                                     placeholder="Auto-filled"
                                                     value={section}
                                                     readOnly
@@ -691,9 +694,9 @@ if (attendanceDone) {
                                             <button
                                                 onClick={markAttendance}
                                                 disabled={!rollNumber || isMatching}
-                                                className="w-full bg-gradient-to-r from-[#ff5a00] to-[#e63a00] hover:shadow-[0_12px_30px_rgba(255,90,0,0.4)] hover:-translate-y-[2px] transition-all disabled:bg-gray-600 disabled:from-gray-600 disabled:to-gray-600 disabled:shadow-none disabled:translate-y-0 text-white py-3 rounded-xl text-lg font-semibold"
+                                                className="w-full bg-blue-600 hover:bg-blue-700 hover:-translate-y-[2px] transition-all disabled:bg-gray-400 disabled:shadow-none disabled:translate-y-0 text-white py-3 rounded-xl text-lg font-semibold flex items-center justify-center shadow-md"
                                             >
-                                                ✅ Submit Attendance
+                                                <FiCheckCircle className="w-5 h-5 mr-2" /> Submit Attendance
                                             </button>
                                         </div>
                                     </>
@@ -712,7 +715,7 @@ if (attendanceDone) {
                     <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center transform transition-all scale-100">
                         {verificationStatus.type === 'NOT_REGISTERED' && (
                             <>
-                                <div className="text-6xl mb-4">🤷</div>
+                                <FiHelpCircle className="text-gray-400 w-24 h-24 mx-auto mb-4" />
                                 <h3 className="text-2xl font-bold text-red-600 mb-2">Not Registered</h3>
                                 <p className="text-gray-600 mb-8 font-medium">No registration found for this Roll Number. Please register first.</p>
                                 <div className="flex gap-4 justify-center">
@@ -723,7 +726,7 @@ if (attendanceDone) {
                         )}
                         {verificationStatus.type === 'FACE_MISMATCH' && (
                             <>
-                                <div className="text-6xl mb-4">🚫</div>
+                                <FiXOctagon className="text-red-500 w-24 h-24 mx-auto mb-4" />
                                 <h3 className="text-2xl font-bold text-red-600 mb-2">Face Mismatch</h3>
                                 <p className="text-gray-600 mb-8 font-medium">Face does not match the registered student for this Roll Number.</p>
                                 <button onClick={() => setVerificationStatus(null)} className="w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold shadow-md transition">Try Again</button>
@@ -731,7 +734,7 @@ if (attendanceDone) {
                         )}
                         {verificationStatus.type === 'SUCCESS' && (
                             <>
-                                <div className="text-6xl mb-4">✅</div>
+                                <FiCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4" />
                                 <h3 className="text-2xl font-bold text-green-600 mb-2">Face Verified</h3>
                                 <p className="text-gray-600 mb-8 font-medium text-lg">Welcome, {verificationStatus.studentName}!</p>
                                 <button onClick={() => setVerificationStatus(null)} className="w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold shadow-md transition">Continue</button>
@@ -739,7 +742,7 @@ if (attendanceDone) {
                         )}
                         {verificationStatus.type === 'ERROR' && (
                             <>
-                                <div className="text-6xl mb-4">⚠️</div>
+                                <FiAlertTriangle className="text-orange-500 w-24 h-24 mx-auto mb-4" />
                                 <h3 className="text-2xl font-bold text-orange-600 mb-2">Verification Error</h3>
                                 <p className="text-gray-600 mb-8 font-medium">{verificationStatus.message}</p>
                                 <button onClick={() => setVerificationStatus(null)} className="w-full py-3 bg-gray-200 hover:bg-gray-300 rounded-xl font-bold text-gray-700 transition">Close</button>

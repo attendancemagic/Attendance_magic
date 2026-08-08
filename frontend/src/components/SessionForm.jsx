@@ -1,3 +1,5 @@
+import { FiClock, FiCrosshair } from "react-icons/fi";
+
 function SessionForm({
 
     department,
@@ -16,151 +18,55 @@ function SessionForm({
 
     return (
 
-        <div className="bg-[rgba(255,255,255,0.08)] backdrop-blur-[22px] border border-[rgba(255,255,255,0.18)] shadow-[0_30px_80px_rgba(0,0,0,0.35)] rounded-2xl p-8 relative z-10">
-
-            <h2 className="text-2xl font-bold text-white mb-8">
-
-                🚀 Start Attendance Session
-
-            </h2>
-
-            {/* <div className="grid md:grid-cols-2 gap-6">
-
-                <div>
-
-                    <label className="block font-semibold mb-2">
-
-                        Department
-
-                    </label>
-
-                    <select
-
-                        className="w-full border rounded-xl p-3"
-
-                        value={department}
-
-                        onChange={(e)=>
-                            setDepartment(e.target.value)
-                        }
-
-                    >
-
-                        <option>CSE</option>
-                        <option>CSD</option>
-                        <option>ECE</option>
-
-                    </select>
-
-                </div>
-
-                <div>
-
-                    <label className="block font-semibold mb-2">
-
-                        Section
-
-                    </label>
-
-                    <select
-
-                        className="w-full border rounded-xl p-3"
-
-                        value={section}
-
-                        onChange={(e)=>
-                            setSection(e.target.value)
-                        }
-
-                    >
-
-                        <option>A</option>
-                        <option>B</option>
-                        <option>C</option>
-                        <option>D</option>
-
-                    </select>
-
-                </div>
-
-            </div> */}
-
-            <div className="grid md:grid-cols-2 gap-6 mt-8">
-
-                <div>
-
-                    <label className="block font-semibold mb-2 text-gray-200">
-
-                        📍 Attendance Radius
-
-                    </label>
-
-                    <input
-
-                        type="number"
-
-                        className="w-full bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.15)] text-white focus:bg-[rgba(255,255,255,0.15)] focus:border-[#ff5a00] transition-all outline-none rounded-xl p-3"
-
-                        value={radius}
-
-                        onChange={(e)=>
-                            setRadius(e.target.value)
-                        }
-
-                    />
-
-                    <p className="text-sm text-gray-400 mt-2">
-
-                        Students must be inside this radius.
-
-                    </p>
-
-                </div>
-
-                <div>
-
-                    <label className="block font-semibold mb-2 text-gray-200">
-
-                        ⏱ Session Duration
-
-                    </label>
-
-                    <input
-
-                        type="number"
-
-                        className="w-full bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.15)] text-white focus:bg-[rgba(255,255,255,0.15)] focus:border-[#ff5a00] transition-all outline-none rounded-xl p-3"
-
-                        value={duration}
-
-                        onChange={(e)=>
-                            setDuration(e.target.value)
-                        }
-
-                    />
-
-                    <p className="text-sm text-gray-400 mt-2">
-
-                        Attendance closes automatically.
-
-                    </p>
-
-                </div>
-
+        <div className="w-full max-w-lg bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-200 overflow-hidden mt-8">
+            <div className="bg-gray-900 px-6 py-8 text-white relative">
+                <h2 className="text-2xl font-bold mb-1">Session summary</h2>
+                <p className="text-gray-400 text-sm">Review before you go live.</p>
             </div>
 
-            <button
+            <div className="flex flex-col">
+                <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+                    <div className="flex items-center gap-3 text-gray-500">
+                        <FiClock className="w-5 h-5" />
+                        <span className="font-medium text-sm">Window</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <input
+                            type="number"
+                            className="w-20 text-right font-bold text-gray-900 bg-transparent focus:outline-none focus:border-b-2 focus:border-[#ff5a00]"
+                            value={duration}
+                            onChange={(e) => setDuration(e.target.value)}
+                        />
+                        <span className="font-bold text-gray-900">minutes</span>
+                    </div>
+                </div>
 
-                onClick={startSession}
+                <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+                    <div className="flex items-center gap-3 text-gray-500">
+                        <FiCrosshair className="w-5 h-5" />
+                        <span className="font-medium text-sm">Geofence</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <input
+                            type="number"
+                            className="w-20 text-right font-bold text-gray-900 bg-transparent focus:outline-none focus:border-b-2 focus:border-[#ff5a00]"
+                            value={radius}
+                            onChange={(e) => setRadius(e.target.value)}
+                        />
+                        <span className="font-bold text-gray-900">meter radius</span>
+                    </div>
+                </div>
 
-                className="mt-10 w-full bg-gradient-to-r from-[#ff5a00] to-[#e63a00] hover:shadow-[0_12px_30px_rgba(255,90,0,0.4)] hover:-translate-y-[2px] transition-all text-white font-bold py-4 rounded-xl"
-
-            >
-
-                🚀 Start Attendance Session
-
-            </button>
-
+                <div className="px-6 py-6 bg-gray-50 text-center">
+                    <button
+                        onClick={startSession}
+                        className="w-full bg-gradient-to-r from-[#ff5a00] to-[#e63a00] hover:shadow-[0_8px_20px_rgba(255,90,0,0.3)] transition-all text-white font-bold py-3.5 rounded-xl text-[15px]"
+                    >
+                        Initialize attendance session
+                    </button>
+                    <p className="text-xs text-gray-500 mt-4 font-medium">A shareable student link is generated instantly.</p>
+                </div>
+            </div>
         </div>
 
     );

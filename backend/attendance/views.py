@@ -245,27 +245,11 @@ def verify_location(request):
         float(student_lon)
     )
 
-    # GPS accuracy buffer:
-    # Consumer GPS is inherently imprecise (3-50+ meters).
-    # We add the device's reported accuracy as a buffer,
-    # and enforce a minimum effective radius of 50 meters
-    # to prevent false rejections from GPS drift.
-    MIN_EFFECTIVE_RADIUS = 50
-    try:
-        accuracy_buffer = float(gps_accuracy)
-    except (TypeError, ValueError):
-        accuracy_buffer = 0
-
-    effective_radius = max(
-        session.radius + accuracy_buffer,
-        MIN_EFFECTIVE_RADIUS
-    )
-
     return Response({
-        "verified": distance <= effective_radius,
+        "verified": distance <= session.radius,
         "distance": round(distance, 2),
         "radius": session.radius,
-        "effective_radius": round(effective_radius, 2),
+        "effective_radius": session.radius,
         "department": session.department,
         "section": session.section
     })

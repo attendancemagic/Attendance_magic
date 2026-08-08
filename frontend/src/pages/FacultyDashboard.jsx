@@ -5,6 +5,7 @@ import API from "../services/api";
 import SessionForm from "../components/SessionForm";
 import AttendanceSummary from "../components/AttendanceSummary";
 import StudentTable from "../components/StudentTable";
+import { FiMonitor, FiCopy, FiStopCircle, FiSearch } from "react-icons/fi";
 
 
 function FacultyDashboard() {
@@ -189,7 +190,7 @@ useEffect(() => {
                         {
                             faculty_latitude: position.coords.latitude,
                             faculty_longitude: position.coords.longitude,
-                            radius: parseInt(radius) + Math.ceil(position.coords.accuracy || 0),
+                            radius: parseInt(radius),
                             duration_minutes: duration
                         }
                     );
@@ -279,17 +280,14 @@ summary.forEach((item) => {
 
 });
 
-    return (        <div className="min-h-screen bg-black p-4 md:p-8 relative overflow-hidden">
-            {/* Subtle background effects */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.6)_100%)] pointer-events-none"></div>
-            
-            <div className="relative z-10">
+    return (
+        <div className="min-h-screen bg-slate-50 p-4 md:p-8">
 
             <Navbar />
 
-            <h1 className="text-3xl font-bold mb-8 text-white">
+            <h1 className="text-3xl font-bold mb-8 text-gray-900">
 
-                Welcome Back 👋
+                Welcome Back
 
             </h1>
 
@@ -334,15 +332,16 @@ summary.forEach((item) => {
 
                 attendanceLink && (
 
-                    <div className="bg-[rgba(255,255,255,0.08)] backdrop-blur-[22px] border border-[rgba(255,255,255,0.18)] shadow-[0_30px_80px_rgba(0,0,0,0.35)] rounded-2xl p-8 mt-8">
+                    <div className="bg-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-3xl p-8 mt-8">
 
-                        <h2 className="text-2xl font-bold mb-6 text-white">
+                        <div className="flex items-center gap-3 mb-6">
+                            <FiMonitor className="text-green-500 w-6 h-6 animate-pulse" />
+                            <h2 className="text-2xl font-bold text-gray-900">
+                                Live Attendance Session
+                            </h2>
+                        </div>
 
-                            🟢 Live Attendance Session
-
-                        </h2>
-
-                        <div className="space-y-4 text-gray-300">
+                        <div className="space-y-4 text-gray-700">
 
                             <p>
 
@@ -388,7 +387,7 @@ summary.forEach((item) => {
 
                             <div>
 
-                                <label className="font-semibold text-gray-200">
+                                <label className="font-semibold text-gray-700">
 
                                     Attendance Link
 
@@ -396,7 +395,7 @@ summary.forEach((item) => {
 
                                 <input
 
-                                    className="w-full bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.15)] text-white outline-none rounded-lg p-3 mt-2"
+                                    className="w-full bg-gray-100 border border-gray-300 text-gray-800 outline-none rounded-lg p-3 mt-2"
 
                                     readOnly
 
@@ -421,22 +420,22 @@ summary.forEach((item) => {
 
                                     }}
 
-                                    className="bg-gradient-to-r from-[#ff5a00] to-[#e63a00] hover:shadow-[0_12px_30px_rgba(255,90,0,0.4)] hover:-translate-y-[2px] transition-all text-white px-6 py-3 rounded-xl w-full md:w-auto font-bold"
+                                    className="bg-blue-600 hover:bg-blue-700 transition-all text-white px-6 py-3 rounded-xl w-full md:w-auto font-bold flex items-center justify-center gap-2 shadow-md"
 
                                 >
 
-                                    📋 Copy Attendance Link
+                                    <FiCopy /> Copy Attendance Link
 
                                 </button>
                                 <button
 
         onClick={endSession}
 
-        className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl w-full md:w-auto"
+        className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl w-full md:w-auto font-bold flex items-center justify-center gap-2 shadow-md"
 
     >
 
-        🛑 End Session
+        <FiStopCircle /> End Session
 
     </button>
                             </div>
@@ -449,7 +448,7 @@ summary.forEach((item) => {
 
             }
 
-            <hr className="my-10 border-[rgba(255,255,255,0.15)]" />
+            <hr className="my-10 border-gray-200" />
 
             <AttendanceSummary
 
@@ -458,14 +457,16 @@ summary.forEach((item) => {
     fetchStudents={fetchStudents}
 
 />
-            <div className="mt-6 mb-4">
-
+            <div className="mt-6 mb-4 relative">
+    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <FiSearch className="text-gray-400 w-5 h-5" />
+    </div>
     <input
         type="text"
-        placeholder="🔍 Search by Name or Roll Number"
+        placeholder="Search by Name or Roll Number"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.15)] text-white focus:bg-[rgba(255,255,255,0.15)] focus:border-[#ff5a00] transition-all outline-none rounded-xl p-3"
+        className="w-full bg-white border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none rounded-xl p-3 pl-10 shadow-sm"
     />
 
 </div>
@@ -481,7 +482,6 @@ summary.forEach((item) => {
 
 </div>
 
-        </div>
         </div>
     );
 
