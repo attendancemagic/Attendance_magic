@@ -183,7 +183,7 @@ useEffect(() => {
 
         let bestPosition = null;
         let watchId;
-        const maxWaitTime = 7000;
+        const maxWaitTime = 15000;
         
         const processPosition = async (position) => {
             const createSession = async () => {

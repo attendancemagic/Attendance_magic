@@ -200,7 +200,7 @@ setSection(response.data.section || "A");
         
         let bestPosition = null;
         let watchId;
-        const maxWaitTime = 7000; // 7 seconds to get the best lock
+        const maxWaitTime = 15000; // 15 seconds to get the best lock
         
         const processPosition = async (position) => {
             setLocationStatus("Verifying location with server...");
