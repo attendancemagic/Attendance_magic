@@ -238,6 +238,11 @@ def verify_location(request):
             status=400
         )
 
+    try:
+        accuracy = float(gps_accuracy)
+    except (ValueError, TypeError):
+        accuracy = 9999.0
+
     distance = calculate_distance(
         session.faculty_latitude,
         session.faculty_longitude,
@@ -245,13 +250,29 @@ def verify_location(request):
         float(student_lon)
     )
 
+    if accuracy > 200:
+        verified = False
+        reason = "accuracy_too_low"
+    elif distance > session.radius:
+        verified = False
+        reason = "outside_radius"
+    else:
+        verified = True
+        reason = "verified"
+
     return Response({
-        "verified": distance <= session.radius,
+        "verified": verified,
+        "reason": reason,
         "distance": round(distance, 2),
         "radius": session.radius,
         "effective_radius": session.radius,
         "department": session.department,
-        "section": session.section
+        "section": session.section,
+        "gps_accuracy": round(accuracy, 2),
+        "faculty_latitude": session.faculty_latitude,
+        "faculty_longitude": session.faculty_longitude,
+        "student_latitude": float(student_lat),
+        "student_longitude": float(student_lon),
     })
 @api_view(["POST"])
 def mark_attendance(request):

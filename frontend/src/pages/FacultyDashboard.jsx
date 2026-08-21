@@ -43,7 +43,7 @@ const [selectedSection, setSelectedSection] = useState(null);
             if (response.data && response.data.id) {
                 setSessionActive(true);
                 setExpiresAt(response.data.expires_at);
-                const link = `https://attendance-magic-xi.vercel.app/attendance/${response.data.id}`;
+                const link = `${window.location.origin}/attendance/${response.data.id}`;
                 setAttendanceLink(link);
             }
         } catch (error) {
@@ -176,56 +176,89 @@ useEffect(() => {
 }, [selectedDepartment, selectedSection]);
 
     const startSession = () => {
-
         if (!navigator.geolocation) {
             alert("Geolocation is not supported by your browser.");
             return;
         }
 
-        navigator.geolocation.getCurrentPosition(
-            async (position) => {
-                const createSession = async () => {
-                    const response = await API.post(
-                        "start-session/",
-                        {
-                            faculty_latitude: position.coords.latitude,
-                            faculty_longitude: position.coords.longitude,
-                            radius: parseInt(radius),
-                            duration_minutes: duration
-                        }
-                    );
-
-                    console.log(
-                        "Faculty Location:",
-                        position.coords.latitude,
-                        position.coords.longitude
-                    );
-
-                    setAttendanceLink(response.data.attendance_link);
-                    setExpiresAt(response.data.data.expires_at);
-                    setSessionActive(true);
-                    alert("Attendance Session Started");
-                    fetchSummary();
-                };
-
-                try {
-                    await createSession();
-                } catch (error) {
-                    const msg = error.response?.data?.message || "";
-                    if (msg.toLowerCase().includes("already active")) {
-                        checkActiveSession();
-                        alert("An attendance session is already active.");
-                    } else {
-                        const errorMsg = msg
-                            || error.response?.data?.detail
-                            || JSON.stringify(error.response?.data)
-                            || "Unknown error. Please check your connection.";
-                        alert("Unable to Start Session: " + errorMsg);
+        let bestPosition = null;
+        let watchId;
+        const maxWaitTime = 7000;
+        
+        const processPosition = async (position) => {
+            const createSession = async () => {
+                const response = await API.post(
+                    "start-session/",
+                    {
+                        faculty_latitude: position.coords.latitude,
+                        faculty_longitude: position.coords.longitude,
+                        radius: parseInt(radius),
+                        duration_minutes: duration
                     }
+                );
+
+                console.log(
+                    "Faculty Location:",
+                    position.coords.latitude,
+                    position.coords.longitude,
+                    "Accuracy:",
+                    position.coords.accuracy
+                );
+
+                const dynamicLink = `${window.location.origin}/attendance/${response.data.session_id}`;
+                setAttendanceLink(dynamicLink);
+                setExpiresAt(response.data.data.expires_at);
+                setSessionActive(true);
+                alert("Attendance Session Started (Accuracy: " + Math.round(position.coords.accuracy) + "m)");
+                fetchSummary();
+            };
+
+            try {
+                await createSession();
+            } catch (error) {
+                const msg = error.response?.data?.message || "";
+                if (msg.toLowerCase().includes("already active")) {
+                    checkActiveSession();
+                    alert("An attendance session is already active.");
+                } else {
+                    const errorMsg = msg
+                        || error.response?.data?.detail
+                        || JSON.stringify(error.response?.data)
+                        || "Unknown error. Please check your connection.";
+                    alert("Unable to Start Session: " + errorMsg);
+                }
+            }
+        };
+
+        alert("Acquiring high-accuracy location, please wait...");
+        
+        const timeoutId = setTimeout(() => {
+            navigator.geolocation.clearWatch(watchId);
+            if (bestPosition) {
+                processPosition(bestPosition);
+            } else {
+                alert("Could not determine your location. Please ensure GPS is on.");
+            }
+        }, maxWaitTime);
+
+        watchId = navigator.geolocation.watchPosition(
+            (position) => {
+                if (!bestPosition || position.coords.accuracy < bestPosition.coords.accuracy) {
+                    bestPosition = position;
+                }
+                
+                if (bestPosition.coords.accuracy <= 20) {
+                    navigator.geolocation.clearWatch(watchId);
+                    clearTimeout(timeoutId);
+                    processPosition(bestPosition);
                 }
             },
             (error) => {
-                alert("Please allow location access: " + error.message);
+                if (!bestPosition) {
+                    navigator.geolocation.clearWatch(watchId);
+                    clearTimeout(timeoutId);
+                    alert("Please allow location access: " + error.message);
+                }
             },
             {
                 enableHighAccuracy: true,

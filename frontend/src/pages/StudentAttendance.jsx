@@ -23,6 +23,9 @@ function StudentAttendance() {
 
     const [verified, setVerified] = useState(false);
     const [distance, setDistance] = useState(null);
+    const [gpsAccuracy, setGpsAccuracy] = useState(null);
+    const [locationStatus, setLocationStatus] = useState("");
+    const [locationReason, setLocationReason] = useState("");
 
     const [faceImage, setFaceImage] = useState(null);
     const [isModelsLoaded, setIsModelsLoaded] = useState(false);
@@ -131,7 +134,8 @@ function StudentAttendance() {
             }
         } catch (error) {
             console.error("Verification error", error);
-            setVerificationStatus({ type: 'ERROR', message: 'An error occurred during verification.' });
+            const errMsg = error && error.message ? error.message : (error instanceof Event ? "CORS or Image Load Error (Check Cloudinary)" : String(error));
+            setVerificationStatus({ type: 'ERROR', message: `Verification failed: ${errMsg}` });
         } finally {
             setIsMatching(false);
         }
@@ -188,36 +192,80 @@ setSection(response.data.section || "A");
     const verifyLocation = (isAuto = false) => {
         if (!navigator.geolocation) {
             toast.error("Geolocation is not supported.");
+            setLocationStatus("Geolocation is not supported.");
             return;
         }
 
-        navigator.geolocation.getCurrentPosition(
-            async (position) => {
-                try {
-                    const response = await API.post(
-                        "verify-location/",
-                        {
-                            session_id: id,
-                            latitude: position.coords.latitude,
-                            longitude: position.coords.longitude,
-                            accuracy: position.coords.accuracy,
-                        }
-                    );
-                    
-                    setVerified(response.data.verified);
-                    setDistance(response.data.distance);
-                    
-                    if (response.data.verified) {
-                        toast.success("Location Verified Successfully");
-                    } else {
-                        toast.error("You are outside the attendance area.");
+        setLocationStatus("Acquiring accurate location...");
+        
+        let bestPosition = null;
+        let watchId;
+        const maxWaitTime = 7000; // 7 seconds to get the best lock
+        
+        const processPosition = async (position) => {
+            setLocationStatus("Verifying location with server...");
+            try {
+                const response = await API.post(
+                    "verify-location/",
+                    {
+                        session_id: id,
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        accuracy: position.coords.accuracy,
                     }
-                } catch (error) {
-                    toast.error("Failed to verify location. Check network or server.");
+                );
+                
+                setVerified(response.data.verified);
+                setDistance(response.data.distance);
+                setGpsAccuracy(response.data.gps_accuracy);
+                setLocationReason(response.data.reason);
+                
+                if (response.data.verified) {
+                    setLocationStatus("Location Verified");
+                    toast.success("Location Verified Successfully");
+                } else if (response.data.reason === "accuracy_too_low") {
+                    setLocationStatus("Location accuracy is too low. Please try again.");
+                    toast.error("Location accuracy is too low. Please try again.");
+                } else {
+                    setLocationStatus("Outside attendance area");
+                    toast.error("You are outside the attendance area.");
+                }
+            } catch (error) {
+                setLocationStatus("Verification failed");
+                toast.error("Failed to verify location. Check network or server.");
+            }
+        };
+
+        const timeoutId = setTimeout(() => {
+            navigator.geolocation.clearWatch(watchId);
+            if (bestPosition) {
+                processPosition(bestPosition);
+            } else {
+                setLocationStatus("Failed to acquire location");
+                toast.error("Could not determine your location. Please ensure GPS is on.");
+            }
+        }, maxWaitTime);
+
+        watchId = navigator.geolocation.watchPosition(
+            (position) => {
+                if (!bestPosition || position.coords.accuracy < bestPosition.coords.accuracy) {
+                    bestPosition = position;
+                    setGpsAccuracy(Math.round(position.coords.accuracy));
+                }
+                
+                if (bestPosition.coords.accuracy <= 20) {
+                    navigator.geolocation.clearWatch(watchId);
+                    clearTimeout(timeoutId);
+                    processPosition(bestPosition);
                 }
             },
             (error) => {
-                toast.error("Unable to fetch location: " + error.message);
+                if (!bestPosition) {
+                    navigator.geolocation.clearWatch(watchId);
+                    clearTimeout(timeoutId);
+                    setLocationStatus("Failed to acquire location");
+                    toast.error("Unable to fetch location: " + error.message);
+                }
             },
             {
                 enableHighAccuracy: true,
@@ -504,60 +552,54 @@ if (attendanceDone) {
                 <div className="space-y-4 text-gray-700">
 
                     <p>
-
                         <strong>Status :</strong>{" "}
-
                         {
-
                             verified ?
-
                                 <span className="text-green-600 font-bold inline-flex items-center gap-1">
-                                    <FiCheckCircle /> Verified
+                                    <FiCheckCircle /> {locationStatus || "Verified"}
                                 </span>
-
                                 :
-
                                 <span className="text-orange-600 font-bold inline-flex items-center gap-1">
-                                    <FiClock /> Waiting for Verification
+                                    <FiClock /> {locationStatus || "Waiting for Verification"}
                                 </span>
-
                         }
-
                     </p>
 
                     {
-
-                        distance !== null && (
-
+                        gpsAccuracy !== null && (
                             <p>
-
-                                <strong>
-
-                                    Distance :
-
-                                </strong>
-
-                                {" "}
-
-                                {distance} meters
-
+                                <strong>GPS Accuracy :</strong>{" "}
+                                {gpsAccuracy} meters
                             </p>
-
                         )
+                    }
 
+                    {
+                        distance !== null && (
+                            <p>
+                                <strong>Distance :</strong>{" "}
+                                {distance} meters
+                            </p>
+                        )
                     }
 
                     {
                         !verified && distance !== null && (
-
                             <div className="bg-red-100 text-red-700 p-4 rounded-xl flex items-center gap-2">
-
-                                <FiXCircle className="w-5 h-5 flex-shrink-0" /> You are outside the attendance area.
-
+                                <FiXCircle className="w-5 h-5 flex-shrink-0" /> {locationReason === "accuracy_too_low" ? "Location accuracy is too low. Please try again." : "You are outside the attendance area."}
                             </div>
-
                         )
+                    }
 
+                    {
+                        !verified && (
+                            <button
+                                onClick={() => verifyLocation(false)}
+                                className="w-full bg-blue-100 hover:bg-blue-200 transition-all text-blue-700 py-2 rounded-xl font-bold mt-2"
+                            >
+                                Retry Location Verification
+                            </button>
+                        )
                     }
 
                     {                        verified && (
